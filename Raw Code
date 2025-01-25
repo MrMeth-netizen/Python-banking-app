@@ -1,0 +1,95 @@
+class BankAccount:
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        self.balance = 0
+
+    def deposit(self, amount):
+        if amount > 0:
+            self.balance += amount
+            print(f"Deposited ${amount}. New balance: ${self.balance}")
+        else:
+            print("Deposit amount must be positive.")
+
+    def withdraw(self, amount):
+        if amount > 0 and amount <= self.balance:
+            self.balance -= amount
+            print(f"Withdrew ${amount}. New balance: ${self.balance}")
+        elif amount > self.balance:
+            print("Insufficient funds.")
+        else:
+            print("Withdrawal amount must be positive.")
+
+    def get_balance(self):
+        return self.balance
+
+
+class BankApp:
+    def __init__(self):
+        self.accounts = {}
+
+    def create_account(self):
+        print("\nCreate Account")
+        username = input("Enter username: ")
+        if username in self.accounts:
+            print("Username already taken, please choose another one.")
+            return
+        password = input("Enter password: ")
+        self.accounts[username] = BankAccount(username, password)
+        print(f"Account for {username} created successfully!")
+
+    def login(self):
+        print("\nLogin")
+        username = input("Enter username: ")
+        password = input("Enter password: ")
+        if username in self.accounts and self.accounts[username].password == password:
+            print(f"Welcome, {username}!")
+            self.logged_in_menu(self.accounts[username])
+        else:
+            print("Invalid username or password.")
+
+    def logged_in_menu(self, account):
+        while True:
+            print("\n--- Menu ---")
+            print("1. Deposit Money")
+            print("2. Withdraw Money")
+            print("3. Check Balance")
+            print("4. Logout")
+            choice = input("Enter your choice: ")
+
+            if choice == "1":
+                amount = float(input("Enter amount to deposit: "))
+                account.deposit(amount)
+            elif choice == "2":
+                amount = float(input("Enter amount to withdraw: "))
+                account.withdraw(amount)
+            elif choice == "3":
+                print(f"Your current balance is: ${account.get_balance()}")
+            elif choice == "4":
+                print("Logged out successfully.")
+                break
+            else:
+                print("Invalid choice, please try again.")
+
+    def run(self):
+        while True:
+            print("\n--- Banking App ---")
+            print("1. Create Account")
+            print("2. Login")
+            print("3. Exit")
+            choice = input("Enter your choice: ")
+
+            if choice == "1":
+                self.create_account()
+            elif choice == "2":
+                self.login()
+            elif choice == "3":
+                print("Thank you for using the banking app. Goodbye!")
+                break
+            else:
+                print("Invalid choice, please try again.")
+
+
+if __name__ == "__main__":
+    app = BankApp()
+    app.run()
